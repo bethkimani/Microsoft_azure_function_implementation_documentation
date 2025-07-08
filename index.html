@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating an Azure Function with Visual Studio Code</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Creating an Azure Function with Visual Studio Code</h1>
+            <p>This guide provides a comprehensive tutorial on creating, testing, and deploying a C# Azure Function using Visual Studio Code. The exercise takes approximately 15 minutes to complete.</p>
+        </header>
+
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <p>To complete this exercise, ensure you have the following:</p>
+            <ul>
+                <li><strong>Azure Subscription:</strong> Sign up for an Azure subscription if you don’t have one.</li>
+                <li><strong>Visual Studio Code:</strong> Installed on a supported platform.</li>
+                <li><strong>.NET 8:</strong> Set as the target framework.</li>
+                <li><strong>C# Dev Kit:</strong> Installed in Visual Studio Code.</li>
+                <li><strong>Azure Functions Extension:</strong> Installed in Visual Studio Code.</li>
+                <li><strong>Azure Functions Core Tools (version 4.x):</strong> Install using the following commands in a terminal:</li>
+            </ul>
+            <pre><code>winget uninstall Microsoft.Azure.FunctionsCoreTools
+winget install Microsoft.Azure.FunctionsCoreTools</code></pre>
+            <p>For installation on other platforms, refer to <a href="https://github.com/Azure/azure-functions-core-tools" target="_blank">Azure Functions Core Tools on GitHub</a>.</p>
+        </section>
+
+        <section id="instructions">
+            <h2>Step-by-Step Instructions</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-button">1. Create Your Local Project</button>
+                    <div class="accordion-content">
+                        <p>In this section, you create a local Azure Functions project in C# using Visual Studio Code.</p>
+                        <ol>
+                            <li>Open Visual Studio Code and press <strong>F1</strong> to open the command palette.</li>
+                            <li>Search for and select <strong>Azure Functions: Create New Project...</strong>.</li>
+                            <li>Choose a directory for your project workspace:
+                                <ul>
+                                    <li>Select <strong>Browse...</strong> to choose an empty folder or create a new one. Do not select a folder already part of a workspace.</li>
+                                </ul>
+                            </li>
+                            <li>Provide the following information at the prompts:
+                                <ul>
+                                    <li><strong>Select a language:</strong> Choose <strong>C#</strong>.</li>
+                                    <li><strong>Select a .NET runtime:</strong> Choose <strong>.NET 8.0 Isolated</strong>.</li>
+                                    <li><strong>Select a template for your project's first function:</strong> Choose <strong>HTTP trigger</strong>. (If the template isn’t visible, use the <strong>Change template filter</strong> option.)</li>
+                                    <li><strong>Provide a function name:</strong> Enter <strong>HttpExample</strong>.</li>
+                                    <li><strong>Provide a namespace:</strong> Enter <strong>My.Function</strong>.</li>
+                                    <li><strong>Authorization level:</strong> Select <strong>Anonymous</strong> to allow anyone to call the function endpoint.</li>
+                                </ul>
+                            </li>
+                            <li>Visual Studio Code generates the Azure Functions project with an HTTP trigger. View the project files in the <strong>Explorer</strong> panel.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-button">2. Run the Function Locally</button>
+                    <div class="accordion-content">
+                        <p>Test the function on your local development computer using Azure Functions Core Tools.</p>
+                        <ol>
+                            <li>Ensure the terminal is open in Visual Studio Code:
+                                <ul>
+                                    <li>Select <strong>Terminal</strong> > <strong>New Terminal</strong> from the menu bar.</li>
+                                </ul>
+                            </li>
+                            <li>Press <strong>F5</strong> to start the function app in the debugger.
+                                <ul>
+                                    <li>Output from Core Tools appears in the <strong>Terminal</strong> panel, including the URL endpoint of your HTTP-triggered function running locally.</li>
+                                </ul>
+                            </li>
+                            <li>In the <strong>Azure: Functions</strong> area of the sidebar, expand <strong>Local Project</strong> > <strong>Functions</strong>.</li>
+                            <li>Right-click the <strong>HttpExample</strong> function and select <strong>Execute Function Now...</strong>.</li>
+                            <li>In the <strong>Enter request body</strong> prompt, type:
+                                <pre><code>{ "name": "Azure" }</code></pre>
+                            </li>
+                            <li>Press <strong>Enter</strong> to send the request to your function.</li>
+                            <li>When the function executes locally, a notification appears in Visual Studio Code. View the notification by selecting the <strong>notification bell icon</strong> in the lower right corner.</li>
+                            <li>Check the <strong>Terminal</strong> panel for information about the function execution.</li>
+                            <li>Press <strong>Shift + F5</strong> to stop Core Tools and disconnect the debugger.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-button">3. Deploy and Execute the Function in Azure</button>
+                    <div class="accordion-content">
+                        <p>After verifying the function works locally, deploy it to Azure and test it in the cloud.</p>
+                        <h3>Sign in to Azure</h3>
+                        <ol>
+                            <li>If not already signed in, select the <strong>Azure icon</strong> in the Activity bar.</li>
+                            <li>In the <strong>Azure: Functions</strong> area, choose <strong>Sign in to Azure...</strong>.</li>
+                            <li>Follow the browser prompts to sign in with your Azure account credentials.</li>
+                            <li>Close the browser window after signing in. Your Azure subscriptions will appear in the sidebar.</li>
+                        </ol>
+                        <h3>Create Resources in Azure</h3>
+                        <ol>
+                            <li>In the <strong>Azure: Functions</strong> area, select the <strong>Create resource...</strong> button.</li>
+                            <li>Provide the following information at the prompts:
+                                <ul>
+                                    <li><strong>Select a resource to create:</strong> Choose <strong>Create Function App in Azure...</strong>.</li>
+                                    <li><strong>Select subscription:</strong> Choose your Azure subscription.</li>
+                                    <li><strong>Enter a globally unique name for the function app:</strong> Enter a valid URL path name, e.g., <strong>myfunctionapp</strong>.</li>
+                                    <li><strong>Select a location for new resources:</strong> Choose a region near you for better performance.</li>
+                                    <li><strong>Select a runtime stack:</strong> Choose <strong>.NET 8.0 Isolated</strong>.</li>
+                                    <li><strong>Select resource authentication type:</strong> Choose <strong>Secrets</strong>.</li>
+                                </ul>
+                            </li>
+                            <li>Monitor the status of resource creation in the <strong>AZURE</strong> area of the terminal window.</li>
+                            <li>Upon completion, the following resources are created in your subscription:
+                                <ul>
+                                    <li><strong>Resource group:</strong> A logical container for related resources.</li>
+                                    <li><strong>Azure Storage account:</strong> Maintains state and project information.</li>
+                                    <li><strong>Flex consumption plan:</strong> Defines the serverless function app host.</li>
+                                    <li><strong>Function app:</strong> Provides the environment for executing your function code.</li>
+                                    <li><strong>Application Insights instance:</strong> Tracks usage of your function app.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <h3>Deploy the Project to Azure</h3>
+                        <p><strong>Important:</strong> Publishing to an existing function app overwrites previous deployments.</p>
+                        <ol>
+                            <li>In the command palette (<strong>F1</strong>), search for and select <strong>Azure Functions: Deploy to Function App...</strong>.</li>
+                            <li>Choose the subscription used when creating the resources.</li>
+                            <li>Select the function app you created (e.g., <strong>myfunctionapp</strong>).</li>
+                            <li>When prompted about overwriting previous deployments, select <strong>Deploy</strong>.</li>
+                            <li>After deployment completes, select <strong>View Output</strong> to review deployment details. If you miss the notification, select the <strong>notification bell icon</strong> to view it again.</li>
+                        </ol>
+                        <h3>Run the Function in Azure</h3>
+                        <ol>
+                            <li>In the <strong>Resources</strong> area of the sidebar, expand your subscription, then your function app, and then <strong>Functions</strong>.</li>
+                            <li>Right-click the <strong>HttpExample</strong> function and select <strong>Execute Function Now...</strong>.</li>
+                            <li>In the <strong>Enter request body</strong> prompt, enter:
+                                <pre><code>{ "name": "Azure" }</code></pre>
+                            </li>
+                            <li>Press <strong>Enter</strong> to send the request to your function.</li>
+                            <li>When the function executes in Azure, a notification appears in Visual Studio Code. View it by selecting the <strong>notification bell icon</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-button">4. Clean Up Resources</button>
+                    <div class="accordion-content">
+                        <p>To avoid unnecessary costs, delete the Azure resources created during this exercise.</p>
+                        <ol>
+                            <li>Navigate to the <a href="https://portal.azure.com" target="_blank">Azure Portal</a> and sign in with your Azure credentials if prompted.</li>
+                            <li>Locate the resource group created for this exercise.</li>
+                            <li>View the resources within the resource group.</li>
+                            <li>On the toolbar, select <strong>Delete resource group</strong>.</li>
+                            <li>Enter the resource group name to confirm deletion and proceed.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary">
+            <h2>Summary</h2>
+            <p>In this exercise, you:</p>
+            <ul>
+                <li>Created a C# Azure Functions project with an HTTP trigger using Visual Studio Code.</li>
+                <li>Tested the function locally using Azure Functions Core Tools.</li>
+                <li>Deployed the function to Azure and executed it in the cloud.</li>
+                <li>Cleaned up Azure resources to avoid unnecessary costs.</li>
+            </ul>
+            <p>This process demonstrates how to develop, test, and deploy serverless functions using Visual Studio Code and Azure.</p>
+        </section>
+
+        <section id="additional-notes">
+            <h2>Additional Notes</h2>
+            <ul>
+                <li><strong>Exercise Duration:</strong> Approximately 15 minutes.</li>
+                <li><strong>Completion:</strong> Earn 100 XP and a badge upon completion (via the learning platform).</li>
+                <li><strong>Further Learning:</strong> Explore additional Azure Functions features or advanced deployment options on the <a href="https://learn.microsoft.com/en-us/azure/azure-functions/" target="_blank">Azure Functions documentation</a>.</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>© 2025 Microsoft | <a href="https://www.microsoft.com/en-us/legal/privacy">Privacy</a> | <a href="https://www.microsoft.com/en-us/legal/health">Consumer Health Privacy</a> | <a href="https://www.microsoft.com/en-us/legal/terms-of-use">Terms of Use</a> | <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks">Trademarks</a></p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
