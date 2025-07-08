@@ -1,0 +1,1 @@
+# Microsoft_azure_function_implementation_documentation
